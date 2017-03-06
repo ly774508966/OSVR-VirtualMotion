@@ -1,14 +1,14 @@
 #include "Configure.h"
 
-using namespace OSVRVM30;
+using namespace OSVRVirtualMotion;
 using namespace ConfigureKey;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*----------------------------------------------------------------------------------------------------*/
 Configure::Configure(const osvr::pluginkit::DeviceToken& pDeviceToken, 
-					OSVR_DeviceInitOptions pOptions, const VM30Data& pVM30Data) : 
-					mDeviceToken(pDeviceToken), mVM30Data(pVM30Data)/*,mConfigInterface(NULL)*/ {
+					OSVR_DeviceInitOptions pOptions, const VirtualMotionData& pVirtualMotionData) : 
+					mDeviceToken(pDeviceToken), mVirtualMotionData(pVirtualMotionData)/*,mConfigInterface(NULL)*/ {
 	//osvrDeviceConfigConfig(pOptions, &mConfigInterface);
 }
 

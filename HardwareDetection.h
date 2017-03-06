@@ -1,6 +1,6 @@
 #include <osvr/PluginKit/PluginKit.h>
 
-namespace OSVRVM30 {
+namespace OSVRVirtualMotion {
 	
 	class HardwareDetection {
 

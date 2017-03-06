@@ -1,16 +1,16 @@
-#if !defined(__VM30Data_h__)
-#define __VM30Data_h__
+#if !defined(__VirtualMotionData_h__)
+#define __VirtualMotionData_h__
 
 #include "libvml.h"
 #include <vector>
 
-namespace OSVRVM30 {
+namespace OSVRVirtualMotion {
 
-    class VM30Data {
+    class VirtualMotionData {
 
     public:
 
-        VM30Data(const std::vector<VML_GLOVE*>& gloves);
+        VirtualMotionData(const std::vector<VML_GLOVE*>& gloves);
 
         void update();
 
@@ -37,4 +37,4 @@ namespace OSVRVM30 {
 
 }
 
-#endif //__VM30Data_h__
+#endif //__VirtualMotionData_h__

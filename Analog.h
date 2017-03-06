@@ -2,9 +2,9 @@
 #define __Analog_h__
 #include <osvr/PluginKit/PluginKit.h>
 #include <osvr/PluginKit/AnalogInterfaceC.h>
-#include "VM30Data.h"
+#include "VirtualMotionData.h"
 
-namespace OSVRVM30 {
+namespace OSVRVirtualMotion {
 
     namespace AnalogChannels {
         enum AnalogChannel {
@@ -64,14 +64,14 @@ namespace OSVRVM30 {
     public:
 
         Analog(const osvr::pluginkit::DeviceToken& pDeviceToken,
-            OSVR_DeviceInitOptions pOptions, const VM30Data& pVM30Data);
+            OSVR_DeviceInitOptions pOptions, const VirtualMotionData& pVirtualMotionData);
         void update();
 
         double getValue(AnalogChannels::AnalogChannel channel) const;
 
     private:
         double getNormalizedValue(uint32 bendValue) const;
-        const VM30Data& mVM30Data;
+        const VirtualMotionData& mVirtualMotionData;
         const osvr::pluginkit::DeviceToken& mDeviceToken;
         OSVR_AnalogDeviceInterface mAnalogInterface;
         OSVR_AnalogState mValues[AnalogChannels::AnalogChannelCount];

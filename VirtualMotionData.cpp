@@ -1,11 +1,11 @@
-#include "VM30Data.h"
+#include "VirtualMotionData.h"
 
-using namespace OSVRVM30;
+using namespace OSVRVirtualMotion;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*----------------------------------------------------------------------------------------------------*/
-VM30Data::VM30Data(const std::vector<VML_GLOVE*>& gloves) : mGloves(gloves)
+VirtualMotionData::VirtualMotionData(const std::vector<VML_GLOVE*>& gloves) : mGloves(gloves)
 {
     for (auto& glove : gloves) {
         if (glove) {
@@ -18,65 +18,65 @@ VM30Data::VM30Data(const std::vector<VML_GLOVE*>& gloves) : mGloves(gloves)
 }
 
 
-void VM30Data::update() {
+void VirtualMotionData::update() {
     mSamples.clear();
     for (auto& glove : mGloves) {
         if (glove) {
-            // we cast it back to const in VM30Data::getSample()
+            // we cast it back to const in VirtualMotionData::getSample()
             auto newSample = const_cast<VML_GLOVE_SAMPLE*>(vml_glove_get_sample(glove));
             mSamples.push_back(newSample);
         }
     }
 }
 
-const VML_GLOVE* VM30Data::getLeftGlove() const {
+const VML_GLOVE* VirtualMotionData::getLeftGlove() const {
     return getGlove(getLeftGloveIndex());
 }
 
-const VML_GLOVE* VM30Data::getRightGlove() const {
+const VML_GLOVE* VirtualMotionData::getRightGlove() const {
     return getGlove(getRightGloveIndex());
 }
 
-const VML_GLOVE_SAMPLE* VM30Data::getLeftGloveSample() const {
+const VML_GLOVE_SAMPLE* VirtualMotionData::getLeftGloveSample() const {
     return getSample(getLeftGloveIndex());
 }
 
-const VML_GLOVE_SAMPLE* VM30Data::getRightGloveSample() const {
+const VML_GLOVE_SAMPLE* VirtualMotionData::getRightGloveSample() const {
     return getSample(getRightGloveIndex());
 }
 
-const VML_GLOVE* VM30Data::getGlove(uint32 gloveIndex) const {
+const VML_GLOVE* VirtualMotionData::getGlove(uint32 gloveIndex) const {
     if (gloveIndex >= 0 && gloveIndex < mGloves.size()) {
         return mGloves[gloveIndex];
     }
     return nullptr;
 }
 
-const VML_GLOVE_SAMPLE* VM30Data::getSample(uint32 gloveIndex) const {
+const VML_GLOVE_SAMPLE* VirtualMotionData::getSample(uint32 gloveIndex) const {
     if (gloveIndex >= 0 && gloveIndex < mSamples.size()) {
         return mSamples[gloveIndex];
     }
     return nullptr;
 }
 
-bool VM30Data::hasLeftGlove() const
+bool VirtualMotionData::hasLeftGlove() const
 {
     return getLeftGloveIndex() > 0;
 }
 
-bool VM30Data::hasRightGlove() const {
+bool VirtualMotionData::hasRightGlove() const {
     return getRightGloveIndex() > 0;
 }
 
-int VM30Data::getLeftGloveIndex() const {
+int VirtualMotionData::getLeftGloveIndex() const {
     return getGloveIndex(VML_GLOVE_HAND_LEFT);
 }
 
-int VM30Data::getRightGloveIndex() const {
+int VirtualMotionData::getRightGloveIndex() const {
     return getGloveIndex(VML_GLOVE_HAND_RIGHT);
 }
 
-int VM30Data::getGloveIndex(VML_GLOVE_HAND hand) const {
+int VirtualMotionData::getGloveIndex(VML_GLOVE_HAND hand) const {
     for (size_t i = 0; i < mGloves.size(); i++) {
         auto& glove = mGloves[i];
         if (glove) {

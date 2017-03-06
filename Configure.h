@@ -1,19 +1,19 @@
 #include <osvr/PluginKit/PluginKit.h>
 //#include <osvr/PluginKit/ConfigInterfaceC.h>
-#include "VM30Data.h"
+#include "VirtualMotionData.h"
 
-namespace OSVRVM30 {
+namespace OSVRVirtualMotion {
 
     class Configure {
 
     public:
 
         Configure(const osvr::pluginkit::DeviceToken& pDeviceToken,
-            OSVR_DeviceInitOptions pOptions, const VM30Data& pVM30Data);
+            OSVR_DeviceInitOptions pOptions, const VirtualMotionData& pVirtualMotionData);
 
     private:
 
-        const VM30Data& mVM30Data;
+        const VirtualMotionData& mVirtualMotionData;
         const osvr::pluginkit::DeviceToken& mDeviceToken;
         //OSVR_ConfigDeviceInterface mConfigInterface;
     };

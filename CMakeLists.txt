@@ -1,8 +1,8 @@
 #
-# VM30 plugin for OSVR
+# VirtualMotion plugin for OSVR
 #
 cmake_minimum_required(VERSION 2.8.12)
-project(VM30Plugin)
+project(VirtualMotionPlugin)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
@@ -16,46 +16,46 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 find_package(osvr REQUIRED)
 find_package(Eigen3 REQUIRED)
 find_package(OpenCV REQUIRED core)
-find_package(VM30 REQUIRED)
+find_package(VirtualMotion REQUIRED)
 
 # This generates a header file, from the named json file, containing a string literal
-# named org_osvr_VM30_json (not null terminated)
+# named org_osvr_VirtualMotion_json (not null terminated)
 # The file must be added as a source file to some target (as below) to be generated.
-osvr_convert_json(org_osvr_VM30_json
-	org_osvr_VM30.json
-	"${CMAKE_CURRENT_BINARY_DIR}/org_osvr_VM30_json.h")
+osvr_convert_json(org_osvr_VirtualMotion_json
+	org_osvr_VirtualMotion.json
+	"${CMAKE_CURRENT_BINARY_DIR}/org_osvr_VirtualMotion_json.h")
 
 # Be able to find our generated header file.
 include_directories("${CMAKE_CURRENT_BINARY_DIR}")
 
-include_directories(org_osvr_VM30
+include_directories(org_osvr_VirtualMotion
 	${EIGEN3_INCLUDE_DIR})
 
 # This is just a helper function wrapping CMake's add_library command that
 # sets up include dirs, libraries, and naming convention (no leading "lib")
 # for an OSVR plugin. It also installs the plugin into the right directory.
 # Pass as many source files as you need. See osvrAddPlugin.cmake for full docs.
-osvr_add_plugin(NAME org_osvr_VM30
+osvr_add_plugin(NAME org_osvr_VirtualMotion
 	CPP # indicates we'd like to use the C++ wrapper
 	SOURCES
 	Analog.cpp
 	Analog.h
 	Configure.cpp
 	Configure.h
-	org_osvr_VM30.cpp
-	VM30GloveDevice.cpp
-	VM30GloveDevice.h
+	org_osvr_VirtualMotion.cpp
+	VirtualMotionGloveDevice.cpp
+	VirtualMotionGloveDevice.h
 	HardwareDetection.cpp
 	HardwareDetection.h
-	VM30Data.cpp
-	VM30Data.h
+	VirtualMotionData.cpp
+	VirtualMotionData.h
 	Tracker.cpp
 	Tracker.h
-	"${CMAKE_CURRENT_BINARY_DIR}/org_osvr_VM30_json.h")
+	"${CMAKE_CURRENT_BINARY_DIR}/org_osvr_VirtualMotion_json.h")
 
 # If you use other libraries, find them and add a line like:
-target_link_libraries(org_osvr_VM30
- 	VM30::VM30
+target_link_libraries(org_osvr_VirtualMotion
+ 	VirtualMotion::VirtualMotion
 	${OpenCV_LIBS})
 
-# TODO: Should we also be installing the VM30 library, and if so, where?
+# TODO: Should we also be installing the VirtualMotion library, and if so, where?

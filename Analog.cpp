@@ -1,7 +1,7 @@
 #include "Analog.h"
 
-using namespace OSVRVM30;
-using namespace OSVRVM30::AnalogChannels;
+using namespace OSVRVirtualMotion;
+using namespace OSVRVirtualMotion::AnalogChannels;
 
 inline double getNormalizedSensorValue(uint16 bendValue) {
     if (bendValue > 1000) {
@@ -13,8 +13,8 @@ inline double getNormalizedSensorValue(uint16 bendValue) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*----------------------------------------------------------------------------------------------------*/
 Analog::Analog(const osvr::pluginkit::DeviceToken& pDeviceToken,
-    OSVR_DeviceInitOptions pOptions, const VM30Data& pVM30Data) :
-    mDeviceToken(pDeviceToken), mVM30Data(pVM30Data), mAnalogInterface(NULL) {
+    OSVR_DeviceInitOptions pOptions, const VirtualMotionData& pVirtualMotionData) :
+    mDeviceToken(pDeviceToken), mVirtualMotionData(pVirtualMotionData), mAnalogInterface(NULL) {
     osvrDeviceAnalogConfigure(pOptions, &mAnalogInterface, AnalogChannelCount);
 }
 
@@ -27,11 +27,11 @@ void Analog::update() {
         mValues[0] = 0.0;
     }
 
-    mValues[IsLeftHandAvailable] = mVM30Data.hasLeftGlove() ? 1.0 : 0.0;
-    mValues[IsRightHandAvailable] = mVM30Data.hasRightGlove() ? 1.0 : 0.0;
+    mValues[IsLeftHandAvailable] = mVirtualMotionData.hasLeftGlove() ? 1.0 : 0.0;
+    mValues[IsRightHandAvailable] = mVirtualMotionData.hasRightGlove() ? 1.0 : 0.0;
 
     {
-        auto leftGloveSample = mVM30Data.getLeftGloveSample();
+        auto leftGloveSample = mVirtualMotionData.getLeftGloveSample();
         if (leftGloveSample) {
             mValues[RightLittleProximalBend] = getNormalizedSensorValue(leftGloveSample->FingerBend[0][0]);
             mValues[RightLittleIntermediateBend] = getNormalizedSensorValue(leftGloveSample->FingerBend[0][1]);
@@ -58,7 +58,7 @@ void Analog::update() {
     }
 
     {
-        auto rightGloveSample = mVM30Data.getRightGloveSample();
+        auto rightGloveSample = mVirtualMotionData.getRightGloveSample();
         if (rightGloveSample) {
             mValues[RightLittleProximalBend] = getNormalizedSensorValue(rightGloveSample->FingerBend[4][0]);
             mValues[RightLittleIntermediateBend] = getNormalizedSensorValue(rightGloveSample->FingerBend[4][1]);

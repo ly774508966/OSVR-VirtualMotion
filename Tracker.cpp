@@ -2,20 +2,20 @@
 #include <osvr/Util/Vec3C.h>
 #include <Eigen/Geometry>
 
-#include "org_osvr_VM30_json.h"
+#include "org_osvr_VirtualMotion_json.h"
 
-using namespace OSVRVM30;
+using namespace OSVRVirtualMotion;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*----------------------------------------------------------------------------------------------------*/
 Tracker::Tracker(const osvr::pluginkit::DeviceToken& pDeviceToken,
-    Analog& analog, OSVR_DeviceInitOptions pOptions, const VM30Data& pVM30Data) :
-    mDeviceToken(pDeviceToken), mAnalog(analog), mVM30Data(pVM30Data),
+    Analog& analog, OSVR_DeviceInitOptions pOptions, const VirtualMotionData& pVirtualMotionData) :
+    mDeviceToken(pDeviceToken), mAnalog(analog), mVirtualMotionData(pVirtualMotionData),
     mTrackerInterface(NULL) {
     // note we have two skeleton sensors, one for each hand, each with their own spec
     // this is because the articulation specs for each hand are not connected by a parent joint
-    osvrDeviceSkeletonConfigure(pOptions, &mSkeletonInterface, org_osvr_VM30_json, 2);
+    osvrDeviceSkeletonConfigure(pOptions, &mSkeletonInterface, org_osvr_VirtualMotion_json, 2);
 
     osvrDeviceTrackerConfigure(pOptions, &mTrackerInterface);
 }
@@ -25,8 +25,8 @@ void Tracker::update() {
     OSVR_TimeValue timestamp;
     osvrTimeValueGetNow(&timestamp);
 
-    auto leftHandGloveIndex = mVM30Data.getLeftGloveIndex();
-    auto rightHandGloveIndex = mVM30Data.getRightGloveIndex();
+    auto leftHandGloveIndex = mVirtualMotionData.getLeftGloveIndex();
+    auto rightHandGloveIndex = mVirtualMotionData.getRightGloveIndex();
 
     sendGlove(leftHandGloveIndex, 0, timestamp);
     sendGlove(rightHandGloveIndex, 1, timestamp);
@@ -36,13 +36,13 @@ void Tracker::update() {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*----------------------------------------------------------------------------------------------------*/
 bool Tracker::sendGlove(uint32 pGloveIndex, OSVR_ChannelCount pSkeletonChannel, OSVR_TimeValue pTimestamp) {
-    auto glove = mVM30Data.getGlove(pGloveIndex);
+    auto glove = mVirtualMotionData.getGlove(pGloveIndex);
     if (!glove) {
         // no error necessary, normal if glove is not plugged in
         return false;
     }
 
-    const VML_GLOVE_SAMPLE* gloveSample = mVM30Data.getSample(pGloveIndex);
+    const VML_GLOVE_SAMPLE* gloveSample = mVirtualMotionData.getSample(pGloveIndex);
     if (!gloveSample) {
         // @todo log error?
         return false;
@@ -86,10 +86,10 @@ bool Tracker::sendGlove(uint32 pGloveIndex, OSVR_ChannelCount pSkeletonChannel, 
 //}
 
 /*----------------------------------------------------------------------------------------------------*/
-void Tracker::sendPose(Channel pChannel, bool pIsLeft, const double pVM30Quat[4]) {
+void Tracker::sendPose(Channel pChannel, bool pIsLeft, const double pVirtualMotionQuat[4]) {
     OSVR_PoseState pose;
     osvrVec3Zero(&pose.translation);
-    pose.rotation = getOsvrQuaternion(pVM30Quat, pIsLeft);
+    pose.rotation = getOsvrQuaternion(pVirtualMotionQuat, pIsLeft);
 
     OSVR_ChannelCount channel = pChannel + (pIsLeft ? 0 : ChannelsPerHand);
 
@@ -110,11 +110,11 @@ void Tracker::sendPose(Channel pChannel, bool pIsLeft, const double pVM30Quat[4]
 //}
 
 /*----------------------------------------------------------------------------------------------------*/
-OSVR_Quaternion Tracker::getOsvrQuaternion(const double pVM30Quat[4], bool pIsLeft) {
+OSVR_Quaternion Tracker::getOsvrQuaternion(const double pVirtualMotionQuat[4], bool pIsLeft) {
     OSVR_Quaternion quat;
-    osvrQuatSetW(&quat, pVM30Quat[0]);
-    osvrQuatSetX(&quat, pVM30Quat[1]);
-    osvrQuatSetY(&quat, pVM30Quat[2]);
-    osvrQuatSetZ(&quat, pVM30Quat[3]);
+    osvrQuatSetW(&quat, pVirtualMotionQuat[0]);
+    osvrQuatSetX(&quat, pVirtualMotionQuat[1]);
+    osvrQuatSetY(&quat, pVirtualMotionQuat[2]);
+    osvrQuatSetZ(&quat, pVirtualMotionQuat[3]);
     return quat;
 }

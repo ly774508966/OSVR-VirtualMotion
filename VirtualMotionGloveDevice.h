@@ -1,24 +1,24 @@
 #include <osvr/PluginKit/PluginKit.h>
-#include "VM30Data.h"
+#include "VirtualMotionData.h"
 #include "Analog.h"
 #include "Tracker.h"
 #include "Configure.h"
 
-namespace OSVRVM30 {
+namespace OSVRVirtualMotion {
 
-    class VM30GloveDevice {
+    class VirtualMotionGloveDevice {
 
     public:
 
-        VM30GloveDevice(OSVR_PluginRegContext pContext, const std::vector<VML_GLOVE*>& gloves);
-        ~VM30GloveDevice();
+        VirtualMotionGloveDevice(OSVR_PluginRegContext pContext, const std::vector<VML_GLOVE*>& gloves);
+        ~VirtualMotionGloveDevice();
         OSVR_ReturnCode operator()(OSVR_PluginRegContext pContext);
         OSVR_ReturnCode update();
 
     private:
 
         std::vector<VML_GLOVE*> mGloves;
-        VM30Data* mVM30Data;
+        VirtualMotionData* mVirtualMotionData;
         Analog* mAnalog;
         Tracker* mTracker;
         Configure* mConfigure;

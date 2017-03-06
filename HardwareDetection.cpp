@@ -1,8 +1,8 @@
 #include "HardwareDetection.h"
-#include "VM30GloveDevice.h"
+#include "VirtualMotionGloveDevice.h"
 #include <vector>
 
-using namespace OSVRVM30;
+using namespace OSVRVirtualMotion;
 
 #define MAX_NUM_GLOVES 4
 
@@ -28,7 +28,7 @@ OSVR_ReturnCode HardwareDetection::operator()(OSVR_PluginRegContext pContext) {
         for (uint32 i = 0; i < numGlovesFound; i++) {
             vGloves.push_back(gloves[i]);
         }
-        osvr::pluginkit::registerObjectForDeletion(pContext, new VM30GloveDevice(pContext, vGloves));
+        osvr::pluginkit::registerObjectForDeletion(pContext, new VirtualMotionGloveDevice(pContext, vGloves));
     }
 
     return OSVR_RETURN_SUCCESS;
